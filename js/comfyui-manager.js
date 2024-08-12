@@ -630,7 +630,7 @@ async function updateAll(update_check_checkbox, manager_dialog) {
 		}
 
 		if (response1.status == 400 || response2.status == 400) {
-			show_message('跟新 ComfyUI 或某些节点失败 .<BR><BR>查看日志<BR>');
+			show_message('更新 ComfyUI 或某些节点失败 .<BR><BR>查看日志<BR>');
 			return false;
 		}
 
@@ -668,7 +668,7 @@ async function updateAll(update_check_checkbox, manager_dialog) {
 		return true;
 	}
 	catch (exception) {
-		show_message(`跟新 ComfyUI 或某些节点失败 / ${exception}`);
+		show_message(`更新 ComfyUI 或某些节点失败 / ${exception}`);
 		return false;
 	}
 	finally {
@@ -706,7 +706,7 @@ class ManagerMenuDialog extends ComfyDialog {
 		update_comfyui_button =
 			$el("button.cm-button", {
 				type: "button",
-				textContent: "跟新 ComfyUI",
+				textContent: "更新 ComfyUI",
 				onclick:
 					() => updateComfyUI()
 			});
