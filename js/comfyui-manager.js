@@ -529,7 +529,7 @@ function drawBadge(node, orig, restArgs) {
 
 async function updateComfyUI() {
 	let prev_text = update_comfyui_button.innerText;
-	update_comfyui_button.innerText = "Updating ComfyUI...";
+	update_comfyui_button.innerText = "更新 ComfyUI...";
 	update_comfyui_button.disabled = true;
 	update_comfyui_button.style.backgroundColor = "gray";
 
@@ -537,21 +537,21 @@ async function updateComfyUI() {
 		const response = await api.fetchApi('/comfyui_manager/update_comfyui');
 
 		if (response.status == 400) {
-			show_message('Failed to update ComfyUI.');
+			show_message('更新ComfyUI失败.');
 			return false;
 		}
 
 		if (response.status == 201) {
-			show_message('ComfyUI has been successfully updated.');
+			show_message('ComfyUI更新成功.');
 		}
 		else {
-			show_message('ComfyUI is already up to date with the latest version.');
+			show_message('ComfyUI已经是最新版本.');
 		}
 
 		return true;
 	}
 	catch (exception) {
-		show_message(`Failed to update ComfyUI / ${exception}`);
+		show_message(`更新 ComfyUI / ${exception} 失败`);
 		return false;
 	}
 	finally {
@@ -563,7 +563,7 @@ async function updateComfyUI() {
 
 async function fetchUpdates(update_check_checkbox) {
 	let prev_text = fetch_updates_button.innerText;
-	fetch_updates_button.innerText = "Fetching updates...";
+	fetch_updates_button.innerText = "拉取更新中 ...";
 	fetch_updates_button.disabled = true;
 	fetch_updates_button.style.backgroundColor = "gray";
 
@@ -573,7 +573,7 @@ async function fetchUpdates(update_check_checkbox) {
 		const response = await api.fetchApi(`/customnode/fetch_updates?mode=${mode}`);
 
 		if (response.status != 200 && response.status != 201) {
-			show_message('Failed to fetch updates.');
+			show_message('拉取更新失败.');
 			return false;
 		}
 
@@ -595,13 +595,13 @@ async function fetchUpdates(update_check_checkbox) {
 			update_check_checkbox.checked = false;
 		}
 		else {
-			show_message('All extensions are already up-to-date with the latest versions.');
+			show_message('所有拓展都已经更新到最新版本');
 		}
 
 		return true;
 	}
 	catch (exception) {
-		show_message(`Failed to update custom nodes / ${exception}`);
+		show_message(`更新节点失败： / ${exception}`);
 		return false;
 	}
 	finally {
@@ -613,24 +613,24 @@ async function fetchUpdates(update_check_checkbox) {
 
 async function updateAll(update_check_checkbox, manager_dialog) {
 	let prev_text = update_all_button.innerText;
-	update_all_button.innerText = "Updating all...(ComfyUI)";
+	update_all_button.innerText = "更新全部...(ComfyUI)";
 	update_all_button.disabled = true;
 	update_all_button.style.backgroundColor = "gray";
 
 	try {
 		var mode = manager_instance.datasrc_combo.value;
 
-		update_all_button.innerText = "Updating all...";
+		update_all_button.innerText = "更新全部...";
 		const response1 = await api.fetchApi('/comfyui_manager/update_comfyui');
 		const response2 = await api.fetchApi(`/customnode/update_all?mode=${mode}`);
 
 		if (response2.status == 403) {
-			show_message('This action is not allowed with this security level configuration.');
+			show_message('由于当前的安全设置，这个操作不被允许');
 			return false;
 		}
 
 		if (response1.status == 400 || response2.status == 400) {
-			show_message('Failed to update ComfyUI or several extensions.<BR><BR>See terminal log.<BR>');
+			show_message('跟新 ComfyUI 或某些节点失败 .<BR><BR>查看日志<BR>');
 			return false;
 		}
 
@@ -639,16 +639,16 @@ async function updateAll(update_check_checkbox, manager_dialog) {
 
 			let failed_list = "";
 			if(update_info.failed.length > 0) {
-				failed_list = "<BR>FAILED: "+update_info.failed.join(", ");
+				failed_list = "<BR>失败: "+update_info.failed.join(", ");
 			}
 
 			let updated_list = "";
 			if(update_info.updated.length > 0) {
-				updated_list = "<BR>UPDATED: "+update_info.updated.join(", ");
+				updated_list = "<BR>更新: "+update_info.updated.join(", ");
 			}
 
 			show_message(
-				"ComfyUI and all extensions have been updated to the latest version.<BR>To apply the updated custom node, please <button class='cm-small-button' id='cm-reboot-button5'>RESTART</button> ComfyUI. And refresh browser.<BR>"
+				"ComfyUI和所有拓展都已更新到最新. <BR> 要实施更新，请 <button class='cm-small-button' id='cm-reboot-button5'>重启</button> ComfyUI. 并刷新浏览器<BR>"
 				+failed_list
 				+updated_list
 				);
@@ -662,13 +662,13 @@ async function updateAll(update_check_checkbox, manager_dialog) {
 				});
 		}
 		else {
-			show_message('ComfyUI and all extensions are already up-to-date with the latest versions.');
+			show_message('ComfyUI和所有拓展都已更新到最新.');
 		}
 
 		return true;
 	}
 	catch (exception) {
-		show_message(`Failed to update ComfyUI or several extensions / ${exception}`);
+		show_message(`跟新 ComfyUI 或某些节点失败 / ${exception}`);
 		return false;
 	}
 	finally {
@@ -706,7 +706,7 @@ class ManagerMenuDialog extends ComfyDialog {
 		update_comfyui_button =
 			$el("button.cm-button", {
 				type: "button",
-				textContent: "Update ComfyUI",
+				textContent: "跟新 ComfyUI",
 				onclick:
 					() => updateComfyUI()
 			});
@@ -714,7 +714,7 @@ class ManagerMenuDialog extends ComfyDialog {
 		fetch_updates_button =
 			$el("button.cm-button", {
 				type: "button",
-				textContent: "Fetch Updates",
+				textContent: "拉取更新",
 				onclick:
 					() => fetchUpdates(this.update_check_checkbox)
 			});
@@ -731,7 +731,7 @@ class ManagerMenuDialog extends ComfyDialog {
 			[
 				$el("button.cm-button", {
 					type: "button",
-					textContent: "Custom Nodes Manager",
+					textContent: "三方节点管理器",
 					onclick:
 						() => {
 							if(!CustomNodesManager.instance) {
@@ -743,7 +743,7 @@ class ManagerMenuDialog extends ComfyDialog {
 
 				$el("button.cm-button", {
 					type: "button",
-					textContent: "Install Missing Custom Nodes",
+					textContent: "安装缺少的三方节点",
 					onclick:
 						() => {
 							if(!CustomNodesManager.instance) {
@@ -756,7 +756,7 @@ class ManagerMenuDialog extends ComfyDialog {
 				
 				$el("button.cm-button", {
 					type: "button",
-					textContent: "Model Manager",
+					textContent: "模型管理器",
 					onclick:
 						() => {
 							if(!ModelManager.instance) {
@@ -768,9 +768,9 @@ class ManagerMenuDialog extends ComfyDialog {
 
 				$el("button.cm-button", {
 					type: "button",
-					textContent: "Install via Git URL",
+					textContent: "通过Git Url安装",
 					onclick: () => {
-						var url = prompt("Please enter the URL of the Git repository to install", "");
+						var url = prompt("输入Git仓库地址安装", "");
 
 						if (url !== null) {
 							install_via_git_url(url, self);
@@ -786,7 +786,7 @@ class ManagerMenuDialog extends ComfyDialog {
 				$el("br", {}, []),
 				$el("button.cm-button", {
 					type: "button",
-					textContent: "Alternatives of A1111",
+					textContent: "A1111的替代",
 					onclick:
 						() => {
 							if(!CustomNodesManager.instance) {
@@ -799,7 +799,7 @@ class ManagerMenuDialog extends ComfyDialog {
 				$el("br", {}, []),
 				$el("button.cm-button-red", {
 					type: "button",
-					textContent: "Restart",
+					textContent: "重启",
 					onclick: () => rebootAPI()
 				}),
 			];
@@ -998,7 +998,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					$el("legend.cm-experimental-legend", {}, ["EXPERIMENTAL"]),
 					$el("button.cm-experimental-button", {
 						type: "button",
-						textContent: "Snapshot Manager",
+						textContent: "截图管理器",
 						onclick:
 							() => {
 								if(!SnapshotManager.instance)
@@ -1008,10 +1008,10 @@ class ManagerMenuDialog extends ComfyDialog {
 					}),
 					$el("button.cm-experimental-button", {
 						type: "button",
-						textContent: "Install PIP packages",
+						textContent: "安装Pip包",
 						onclick:
 							() => {
-								var url = prompt("Please enumerate the pip packages to be installed.\n\nExample: insightface opencv-python-headless>=4.1.1\n", "");
+								var url = prompt("请列出需要安装的pip包 .\n\n示例: insightface opencv-python-headless>=4.1.1\n", "");
 
 								if (url !== null) {
 									install_pip(url, self);
@@ -1020,7 +1020,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					}),
 					$el("button.cm-experimental-button", {
 						type: "button",
-						textContent: "Unload models",
+						textContent: "卸载模型",
 						onclick: () => { free_models(); }
 					})
 				]),
@@ -1032,7 +1032,7 @@ class ManagerMenuDialog extends ComfyDialog {
 				$el("button.cm-button", {
 					id: 'cm-manual-button',
 					type: "button",
-					textContent: "Community Manual",
+					textContent: "社区手册",
 					onclick: () => { window.open("https://blenderneko.github.io/ComfyUI-docs/", "comfyui-community-manual"); }
 				}, [
 					$el("div.pysssss-workflow-arrow-2", {
@@ -1045,19 +1045,19 @@ class ManagerMenuDialog extends ComfyDialog {
 							const menu = new LiteGraph.ContextMenu(
 								[
 									{
-										title: "Comfy Custom Node How To",
+										title: "如何使用三方节点",
 										callback: () => { window.open("https://github.com/chrisgoringe/Comfy-Custom-Node-How-To/wiki/aaa_index", "comfyui-community-manual1"); },
 									},
 									{
-										title: "ComfyUI Guide To Making Custom Nodes",
+										title: "如何开发三方节点",
 										callback: () => { window.open("https://github.com/Suzie1/ComfyUI_Guide_To_Making_Custom_Nodes/wiki", "comfyui-community-manual2"); },
 									},
 									{
-										title: "ComfyUI Examples",
+										title: "ComfyUI示例",
 										callback: () => { window.open("https://comfyanonymous.github.io/ComfyUI_examples", "comfyui-community-manual3"); },
 									},
 									{
-										title: "Close",
+										title: "关闭",
 										callback: () => {
 											LiteGraph.closeAllContextMenus();
 										},
@@ -1092,7 +1092,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					},
 				}, [
 					$el("p", {
-						textContent: 'Workflow Gallery',
+						textContent: '工作流画廊',
 						style: {
 							'text-align': 'center',
 							'color': 'white',
@@ -1188,7 +1188,7 @@ class ManagerMenuDialog extends ComfyDialog {
 		const menu = new LiteGraph.ContextMenu(
 			[
 				{
-					title: "Share your art",
+					title: "分享你的作品",
 					callback: () => {
 						if (share_option === 'openart') {
 							showOpenArtShareDialog();
@@ -1208,7 +1208,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					},
 				},
 				{
-					title: "Open 'openart.ai'",
+					title: "打开 'openart.ai'",
 					callback: () => {
 						const url = "https://openart.ai/workflows/dev";
 						localStorage.setItem("wg_last_visited", url);
@@ -1217,7 +1217,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					},
 				},
 				{
-					title: "Open 'youml.com'",
+					title: "打开 'youml.com'",
 					callback: () => {
 						const url = "https://youml.com/?from=comfyui-share";
 						localStorage.setItem("wg_last_visited", url);
@@ -1226,7 +1226,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					},
 				},
 				{
-					title: "Open 'comfyworkflows.com'",
+					title: "打开 'comfyworkflows.com'",
 					callback: () => {
 						const url = "https://comfyworkflows.com/";
 						localStorage.setItem("wg_last_visited", url);
@@ -1235,7 +1235,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					},
 				},
 				{
-					title: "Open 'flowt.ai'",
+					title: "打开 'flowt.ai'",
 					callback: () => {
 						const url = "https://flowt.ai/";
 						localStorage.setItem("wg_last_visited", url);
@@ -1244,7 +1244,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					},
 				},
 				{
-					title: "Open 'esheep'",
+					title: "打开 'esheep'",
 					callback: () => {
 						const url = "https://www.esheep.com";
 						localStorage.setItem("wg_last_visited", url);
@@ -1253,7 +1253,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					},
 				},
 				{
-					title: "Open 'Copus.io'",
+					title: "打开 'Copus.io'",
 					callback: () => {
 						const url = "https://www.copus.io";
 						localStorage.setItem("wg_last_visited", url);
@@ -1317,7 +1317,7 @@ app.registerExtension({
 							setManagerInstance(new ManagerMenuDialog());
 						manager_instance.show();
 					},
-					tooltip: "ComfyUI Manager",
+					tooltip: "ComfyUI Manager CN",
 					content: "Manager",
 					classList: "comfyui-button comfyui-menu-mobile-collapse primary"
 				}).element,
@@ -1326,14 +1326,14 @@ app.registerExtension({
 					action: () => {
 						free_models();
 					},
-					tooltip: "Unload Models"
+					tooltip: "卸载模型"
 				}).element,
 				new(await import("../../scripts/ui/components/button.js")).ComfyButton({
 					icon: "vacuum",
 					action: () => {
 						free_models(true);
 					},
-					tooltip: "Free model and node cache"
+					tooltip: "清空模型和节点缓存"
 				}).element,
 				new(await import("../../scripts/ui/components/button.js")).ComfyButton({
 					icon: "share",
@@ -1354,7 +1354,7 @@ app.registerExtension({
 						}
 						ShareDialogChooser.instance.show();
 					},
-					tooltip: "Share"
+					tooltip: "分享"
 				}).element
 			);
 
@@ -1376,7 +1376,7 @@ app.registerExtension({
 
 		const shareButton = document.createElement("button");
 		shareButton.id = "shareButton";
-		shareButton.textContent = "Share";
+		shareButton.textContent = "分享";
 		shareButton.onclick = () => {
 			if (share_option === 'openart') {
 				showOpenArtShareDialog();
@@ -1440,7 +1440,7 @@ app.registerExtension({
 
 			if (node.category.startsWith('group nodes/')) {
 				options.push({
-					content: "Save As Component",
+					content: "保存为组件",
 					callback: (obj) => {
 						if (!ComponentBuilderDialog.instance) {
 							ComponentBuilderDialog.instance = new ComponentBuilderDialog();
@@ -1462,7 +1462,7 @@ app.registerExtension({
 				}
 
 				options.push({
-					content: "🏞️ Share Output",
+					content: "🏞️ 分享输出",
 					disabled: !hasOutput,
 					callback: (obj) => {
 						if (!ShareDialog.instance) {

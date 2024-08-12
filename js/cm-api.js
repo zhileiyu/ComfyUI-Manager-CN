@@ -3,8 +3,8 @@ import { app } from "../../scripts/app.js";
 import { sleep } from "./common.js";
 
 async function tryInstallCustomNode(event) {
-	let msg = '-= [ComfyUI Manager] extension installation request =-\n\n';
-	msg += `The '${event.detail.sender}' extension requires the installation of the '${event.detail.target.title}' extension. `;
+	let msg = '-= [ComfyUI管理器] 需要安装拓展 =-\n\n';
+	msg += `'${event.detail.sender}' 需要安装以下拓展： '${event.detail.title}' . `;
 
 	if(event.detail.target.installed == 'Disabled') {
 		msg += '此拓展被禁用. 你想要启用它并重启吗'
@@ -43,14 +43,14 @@ async function tryInstallCustomNode(event) {
 									});
 
 			if(response.status == 403) {
-				show_message('在当前的安全设置，这个操作不被允许');
+				show_message('由于当前的安全设置，这个操作不被允许');
 				return false;
 			}
 		}
 
 		let response = await api.fetchApi("/manager/reboot");
 		if(response.status == 403) {
-			show_message('在当前的安全设置，这个操作不被允许');
+			show_message('由于当前的安全设置，这个操作不被允许');
 			return false;
 		}
 
