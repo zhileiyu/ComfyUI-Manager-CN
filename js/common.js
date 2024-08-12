@@ -12,7 +12,7 @@ export async function sleep(ms) {
 }
 
 export function rebootAPI() {
-	if (confirm("Are you sure you'd like to reboot the server?")) {
+	if (confirm("确定要重启ComfyUI服务吗")) {
 		try {
 			api.fetchApi("/manager/reboot");
 		}
@@ -51,7 +51,7 @@ function isValidURL(url) {
 
 export async function install_pip(packages) {
 	if(packages.includes('&'))
-		app.ui.dialog.show(`Invalid PIP package enumeration: '${packages}'`);
+		app.ui.dialog.show(`无效的PIP安装包: '${packages}'`);
 
 	const res = await api.fetchApi("/customnode/install/pip", {
 		method: "POST",
@@ -59,12 +59,12 @@ export async function install_pip(packages) {
 	});
 
 	if(res.status == 403) {
-		show_message('This action is not allowed with this security level configuration.');
+		show_message('由于当前的安全设置，这个操作不被允许');
 		return;
 	}
 
 	if(res.status == 200) {
-		show_message(`PIP package installation is processed.<br>To apply the pip packages, please click the <button id='cm-reboot-button3'><font size='3px'>RESTART</font></button> button in ComfyUI.`);
+		show_message(`PIP包的安装正在进行中.<br>使安装生效 <button id='cm-reboot-button3'><font size='3px'>重启</font></button> ComfyUI.`);
 
 		const rebootButton = document.getElementById('cm-reboot-button3');
 		const self = this;
@@ -72,7 +72,7 @@ export async function install_pip(packages) {
 		rebootButton.addEventListener("click", rebootAPI);
 	}
 	else {
-		show_message(`Failed to install '${packages}'<BR>See terminal log.`);
+		show_message(`安装包： '${packages} 失败'<BR>查看日志寻找原因.`);
 	}
 }
 
@@ -82,7 +82,7 @@ export async function install_via_git_url(url, manager_dialog) {
 	}
 
 	if(!isValidURL(url)) {
-		show_message(`Invalid Git url '${url}'`);
+		show_message(`无效的Git url '${url}'`);
 		return;
 	}
 
@@ -94,7 +94,7 @@ export async function install_via_git_url(url, manager_dialog) {
 	});
 
 	if(res.status == 403) {
-		show_message('This action is not allowed with this security level configuration.');
+		show_message('由于当前的安全设置，这个操作不被允许');
 		return;
 	}
 
@@ -112,7 +112,7 @@ export async function install_via_git_url(url, manager_dialog) {
 			});
 	}
 	else {
-		show_message(`Failed to install '${url}'<BR>See terminal log.`);
+		show_message(`安装： '${url}' 失败<BR>查看日志寻找原因.`);
 	}
 }
 
@@ -134,16 +134,16 @@ export async function free_models(free_execution_cache) {
 
 		if (res.status == 200) {
 			if(free_execution_cache) {
-				showToast("'Models' and 'Execution Cache' have been cleared.", 3000);
+				showToast("模型和执行缓存已经被清理.", 3000);
 			}
 			else {
-				showToast("Models' have been unloaded.", 3000);
+				showToast("模型已经被卸载", 3000);
 			}
 		} else {
-			showToast('Unloading of models failed. Installed ComfyUI may be an outdated version.', 5000);
+			showToast('卸载模型失败，可能是ComfyUI版本过旧', 5000);
 		}
 	} catch (error) {
-		showToast('An error occurred while trying to unload models.', 5000);
+		showToast('卸载模型时发生错误', 5000);
 	}
 }
 
