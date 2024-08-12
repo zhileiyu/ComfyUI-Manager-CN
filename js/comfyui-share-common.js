@@ -252,9 +252,9 @@ export const showShareDialog = async (share_option) => {
         if (potential_output_nodes.length === 0) {
           // todo: add support for other output node types (animatediff combine, etc.)
           const supported_nodes_string = SUPPORTED_OUTPUT_NODE_TYPES.join(", ");
-          alert(`No supported output node found (${supported_nodes_string}). To share this workflow, please add an output node to your graph and re-run your prompt.`);
+          alert(`输出节点未找到 (${supported_nodes_string}). 想分享这个工作流, 增加一个输出节点，并且重新允许Prompt.`);
         } else {
-          alert("To share this, first run a prompt. Once it's done, click 'Share'.\n\nNOTE: Images of the Share target can only be selected in the PreviewImage, SaveImage, and VHS_VideoCombine nodes. In the case of VHS_VideoCombine, only the image/gif and image/webp formats are supported.");
+          alert("要分享, 先运行一个Prompt. 完成后，点击 '分享'.\n\n注意: 分享的图片必须在 PreviewImage, SaveImage, and VHS_VideoCombine 节点中.  VHS_VideoCombine只支持 image/gif 和 image/webp 的格式");
         }
         return false;
       }
@@ -284,7 +284,7 @@ export class ShareDialogChooser extends ComfyDialog {
 				key: "openart",
 				textContent: "OpenArt AI",
 				website: "https://openart.ai/workflows/",
-				description: "Share ComfyUI workflows and art on OpenArt.ai",
+				description: "在OpenArt.ai，分享ComfyUI 工作流和作品",
 				onclick: () => {
 				  showOpenArtShareDialog();
 				  this.close();
@@ -294,7 +294,7 @@ export class ShareDialogChooser extends ComfyDialog {
 				key: "youml",
 				textContent: "YouML",
 				website: "https://youml.com",
-				description: "Share your workflow or transform it into an interactive app on YouML.com",
+				description: "在YouML.com分享你的工作流或transform",
 				onclick: () => {
 					showYouMLShareDialog();
 				  this.close();
@@ -302,9 +302,9 @@ export class ShareDialogChooser extends ComfyDialog {
 			},
 			{
 				key: "matrix",
-				textContent: "Matrix Server",
+				textContent: "Matrix服务器",
 				website: "https://app.element.io/#/room/%23comfyui_space%3Amatrix.org",
-				description: "Share your art on the official ComfyUI matrix server",
+				description: "在官方ComfyUI matrix服务器分享你的作品",
 				onclick: async () => {
 				  showShareDialog('matrix').then((suc) => {
 				    suc && this.close();

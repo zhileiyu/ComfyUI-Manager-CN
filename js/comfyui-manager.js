@@ -1262,7 +1262,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					},
 				},
 				{
-					title: "Close",
+					title: "关闭",
 					callback: () => {
 						LiteGraph.closeAllContextMenus();
 					},
@@ -1318,7 +1318,7 @@ app.registerExtension({
 						manager_instance.show();
 					},
 					tooltip: "ComfyUI Manager CN",
-					content: "Manager",
+					content: "管理器",
 					classList: "comfyui-button comfyui-menu-mobile-collapse primary"
 				}).element,
 				new(await import("../../scripts/ui/components/button.js")).ComfyButton({
@@ -1366,7 +1366,7 @@ app.registerExtension({
 
 		// old style Manager button
 		const managerButton = document.createElement("button");
-		managerButton.textContent = "Manager";
+		managerButton.textContent = "管理器";
 		managerButton.onclick = () => {
 				if(!manager_instance)
 					setManagerInstance(new ManagerMenuDialog());
