@@ -1,15 +1,15 @@
 [project]
-name = "comfyui-manager"
+name = "ComfyUI管理器"
 description = "ComfyUI-Manager provides features to install and manage custom nodes for ComfyUI, as well as various functionalities to assist with ComfyUI."
 version = "2.48.6"
 license = { file = "LICENSE.txt" }
 dependencies = ["GitPython", "PyGithub", "matrix-client==0.4.0", "transformers", "huggingface-hub>0.20", "typer", "rich", "typing-extensions"]
 
 [project.urls]
-Repository = "https://github.com/ltdrdata/ComfyUI-Manager"
+Repository = "https://github.com/zhileiyu/ComfyUI-Manager-CN"
 #  Used by Comfy Registry https://comfyregistry.org
 
 [tool.comfy]
 PublisherId = "drltdata"
-DisplayName = "ComfyUI-Manager"
+DisplayName = "ComfyUI管理器"
 Icon = ""

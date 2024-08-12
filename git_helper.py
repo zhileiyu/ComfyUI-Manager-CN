@@ -37,7 +37,7 @@ def download_url(url, dest_folder, filename=None):
 
 
 config_path = os.path.join(os.path.dirname(__file__), "config.ini")
-nodelist_path = os.path.join(os.path.dirname(__file__), "custom-node-list.json")
+nodelist_path = os.path.join(os.path.dirname(__file__), "cn_custom-node-list.json")
 working_directory = os.getcwd()
 
 if os.path.basename(working_directory) != 'custom_nodes':

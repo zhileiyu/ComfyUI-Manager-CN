@@ -1133,7 +1133,7 @@ async def extract_nodes_from_workflow(filepath, mode='local', channel_url='defau
                     extract_nodes(x)
 
     # lookup dependent custom nodes
-    ext_map = await get_data_by_mode(mode, 'extension-node-map.json', channel_url)
+    ext_map = await get_data_by_mode(mode, 'cn_extension-node-map.json', channel_url)
 
     rext_map = {}
     preemption_map = {}

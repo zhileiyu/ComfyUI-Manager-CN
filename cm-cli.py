@@ -158,7 +158,7 @@ class Ctx:
         channel_url = channel_dict[self.channel]
 
         res = {}
-        json_obj = asyncio.run(core.get_data_by_mode(self.mode, 'custom-node-list.json', channel_url=channel_url))
+        json_obj = asyncio.run(core.get_data_by_mode(self.mode, 'cn_custom-node-list.json', channel_url=channel_url))
         for x in json_obj['custom_nodes']:
             for y in x['files']:
                 if 'github.com' in y and not (y.endswith('.py') or y.endswith('.js')):

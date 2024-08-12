@@ -271,7 +271,7 @@ def update_custom_nodes():
 
     node_info = {}
 
-    git_url_titles_preemptions = get_git_urls_from_json('custom-node-list.json')
+    git_url_titles_preemptions = get_git_urls_from_json('cn_custom-node-list.json')
 
     def process_git_url_title(url, title, preemptions, node_pattern):
         name = os.path.basename(url)
@@ -387,7 +387,7 @@ def update_custom_nodes():
         for url, title, preemptions, node_pattern in git_url_titles_preemptions:
             executor.submit(process_git_url_title, url, title, preemptions, node_pattern)
 
-    py_url_titles_and_pattern = get_py_urls_from_json('custom-node-list.json')
+    py_url_titles_and_pattern = get_py_urls_from_json('cn_custom-node-list.json')
 
     def download_and_store_info(url_title_preemptions_and_pattern):
         url, title, preemptions, node_pattern = url_title_preemptions_and_pattern
@@ -512,7 +512,7 @@ def gen_json(node_info):
             nodes.sort()
             data[git_url] = (nodes, metadata_in_url)
 
-    json_path = f"extension-node-map.json"
+    json_path = f"cn_extension-node-map.json"
     with open(json_path, "w", encoding='utf-8') as file:
         json.dump(data, file, indent=4, sort_keys=True)
 

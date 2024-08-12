@@ -58,11 +58,13 @@ def is_allowed_security_level(level):
 
 
 async def get_risky_level(files):
-    json_data1 = await core.get_data_by_mode('local', 'custom-node-list.json')
-    json_data2 = await core.get_data_by_mode('cache', 'custom-node-list.json', channel_url='https://github.com/ltdrdata/ComfyUI-Manager/raw/main')
+    json_data1 = await core.get_data_by_mode('local', 'cn_custom-node-list.json')
+    #json_data2 = await core.get_data_by_mode('cache', 'cn_custom-node-list.json', channel_url='https://github.com/zhileiyu/ComfyUI-Manager-CN')
 
     all_urls = set()
-    for x in json_data1['custom_nodes'] + json_data2['custom_nodes']:
+    # for x in json_data1['custom_nodes'] + json_data2['custom_nodes']:
+    #     all_urls.update(x['files'])
+    for x in json_data1['custom_nodes']:
         all_urls.update(x['files'])
 
     for x in files:
@@ -113,8 +115,8 @@ core.js_path = os.path.join(core.comfy_path, "web", "extensions")
 
 local_db_model = os.path.join(core.comfyui_manager_path, "model-list.json")
 local_db_alter = os.path.join(core.comfyui_manager_path, "alter-list.json")
-local_db_custom_node_list = os.path.join(core.comfyui_manager_path, "custom-node-list.json")
-local_db_extension_node_mappings = os.path.join(core.comfyui_manager_path, "extension-node-map.json")
+local_db_custom_node_list = os.path.join(core.comfyui_manager_path, "cn_custom-node-list.json")
+local_db_extension_node_mappings = os.path.join(core.comfyui_manager_path, "cn_extension-node-map.json")
 components_path = os.path.join(core.comfyui_manager_path, 'components')
 
 
@@ -348,7 +350,7 @@ async def fetch_customnode_mappings(request):
         mode = "local"
         nickname_mode = True
 
-    json_obj = await core.get_data_by_mode(mode, 'extension-node-map.json')
+    json_obj = await core.get_data_by_mode(mode, 'cn_extension-node-map.json')
 
     if nickname_mode:
         json_obj = nickname_filter(json_obj)
@@ -374,7 +376,7 @@ async def fetch_customnode_mappings(request):
 @PromptServer.instance.routes.get("/customnode/fetch_updates")
 async def fetch_updates(request):
     try:
-        json_obj = await core.get_data_by_mode(request.rel_url.query["mode"], 'custom-node-list.json')
+        json_obj = await core.get_data_by_mode(request.rel_url.query["mode"], 'cn_custom-node-list.json')
 
         check_custom_nodes_installed(json_obj, True)
 
@@ -398,7 +400,7 @@ async def update_all(request):
     try:
         core.save_snapshot_with_postfix('autosave')
 
-        json_obj = await core.get_data_by_mode(request.rel_url.query["mode"], 'custom-node-list.json')
+        json_obj = await core.get_data_by_mode(request.rel_url.query["mode"], 'cn_custom-node-list.json')
 
         check_custom_nodes_installed(json_obj, do_update=True)
 
@@ -475,7 +477,7 @@ async def fetch_customnode_list(request):
     else:
         channel = core.get_config()['channel_url']
 
-    json_obj = await core.get_data_by_mode(request.rel_url.query["mode"], 'custom-node-list.json')
+    json_obj = await core.get_data_by_mode(request.rel_url.query["mode"], 'cn_custom-node-list.json')
     json_obj_github = await core.get_data_by_mode(request.rel_url.query["mode"], 'github-stats.json', 'default')
     json_obj = await populate_github_stats(json_obj, json_obj_github)
 
@@ -529,7 +531,7 @@ async def fetch_alternatives_list(request):
         skip_update = False
 
     alter_json = await core.get_data_by_mode(request.rel_url.query["mode"], 'alter-list.json')
-    custom_node_json = await core.get_data_by_mode(request.rel_url.query["mode"], 'custom-node-list.json')
+    custom_node_json = await core.get_data_by_mode(request.rel_url.query["mode"], 'cn_custom-node-list.json')
 
     fileurl_to_custom_node = {}
 
@@ -1663,7 +1665,7 @@ def sanitize(data):
 
 
 async def _confirm_try_install(sender, custom_node_url, msg):
-    json_obj = await core.get_data_by_mode('default', 'custom-node-list.json')
+    json_obj = await core.get_data_by_mode('default', 'cn_custom-node-list.json')
 
     sender = sanitize(sender)
     msg = sanitize(msg)
@@ -1698,8 +1700,8 @@ async def default_cache_update():
                 json.dump(json_obj, file, indent=4, sort_keys=True)
                 print(f"[ComfyUI-Manager] default cache updated: {uri}")
 
-    a = get_cache("custom-node-list.json")
-    b = get_cache("extension-node-map.json")
+    a = get_cache("cn_custom-node-list.json")
+    b = get_cache("cn_extension-node-map.json")
     c = get_cache("model-list.json")
     d = get_cache("alter-list.json")
     e = get_cache("github-stats.json")
