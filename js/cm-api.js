@@ -7,16 +7,16 @@ async function tryInstallCustomNode(event) {
 	msg += `The '${event.detail.sender}' extension requires the installation of the '${event.detail.target.title}' extension. `;
 
 	if(event.detail.target.installed == 'Disabled') {
-		msg += 'However, the extension is currently disabled. Would you like to enable it and reboot?'
+		msg += '此拓展被禁用. 你想要启用它并重启吗'
 	}
 	else if(event.detail.target.installed == 'True') {
-		msg += 'However, it seems that the extension is in an import-fail state or is not compatible with the current version. Please address this issue.';
+		msg += '这个拓展引入失败，可能是冲突或者缺少镜像，请到ComfyUI-Manager-CN项目页提出一个issue';
 	}
 	else {
-		msg += `Would you like to install it and reboot?`;
+		msg += `你想要安装它并重启吗`;
 	}
 
-	msg += `\n\nRequest message:\n${event.detail.msg}`;
+	msg += `\n\n提示:\n${event.detail.msg}`;
 
 	if(event.detail.target.installed == 'True') {
 		alert(msg);
@@ -34,7 +34,7 @@ async function tryInstallCustomNode(event) {
 		}
 		else {
 			await sleep(300);
-			app.ui.dialog.show(`Installing... '${event.detail.target.title}'`);
+			app.ui.dialog.show(`安装中... '${event.detail.target.title}'`);
 
 			const response = await api.fetchApi(`/customnode/install`, {
 										method: 'POST',
@@ -43,20 +43,20 @@ async function tryInstallCustomNode(event) {
 									});
 
 			if(response.status == 403) {
-				show_message('This action is not allowed with this security level configuration.');
+				show_message('在当前的安全设置，这个操作不被允许');
 				return false;
 			}
 		}
 
 		let response = await api.fetchApi("/manager/reboot");
 		if(response.status == 403) {
-			show_message('This action is not allowed with this security level configuration.');
+			show_message('在当前的安全设置，这个操作不被允许');
 			return false;
 		}
 
 		await sleep(300);
 
-		app.ui.dialog.show(`Rebooting...`);
+		app.ui.dialog.show(`重启中...`);
 	}
 }
 
