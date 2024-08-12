@@ -998,7 +998,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					$el("legend.cm-experimental-legend", {}, ["EXPERIMENTAL"]),
 					$el("button.cm-experimental-button", {
 						type: "button",
-						textContent: "截图管理器",
+						textContent: "快照管理器",
 						onclick:
 							() => {
 								if(!SnapshotManager.instance)
