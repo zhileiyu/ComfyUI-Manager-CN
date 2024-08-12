@@ -10,24 +10,24 @@ async function restore_snapshot(target) {
 			const response = await api.fetchApi(`/snapshot/restore?target=${target}`, { cache: "no-store" });
 
 			if(response.status == 403) {
-				show_message('This action is not allowed with this security level configuration.');
+				show_message('由于当前的安全设置，这个操作不被允许');
 				return false;
 			}
 
 			if(response.status == 400) {
-				show_message(`Restore snapshot failed: ${target.title} / ${exception}`);
+				show_message(`恢复快照失败: ${target.title} / ${exception}`);
 			}
 
 			app.ui.dialog.close();
 			return true;
 		}
 		catch(exception) {
-			show_message(`Restore snapshot failed: ${target.title} / ${exception}`);
+			show_message(`恢复快照失败: ${target.title} / ${exception}`);
 			return false;
 		}
 		finally {
 			await SnapshotManager.instance.invalidateControl();
-			SnapshotManager.instance.updateMessage("<BR>To apply the snapshot, please <button id='cm-reboot-button2' class='cm-small-button'>RESTART</button> ComfyUI. And refresh browser.", 'cm-reboot-button2');
+			SnapshotManager.instance.updateMessage("<BR> 点击按钮，使用这个快照 <button id='cm-reboot-button2' class='cm-small-button'>重启</button> ComfyUI. 并刷新浏览器.", 'cm-reboot-button2');
 		}
 	}
 }

@@ -243,10 +243,10 @@ async function save_as_component(node, version, author, prefix, nodename, packna
 		await config.registerType(category);
 
 		let path = await res.text();
-		show_message(`Component '${component_name}' is saved into:\n${path}`);
+		show_message(`组件 '${component_name}' 被保存到:\n${path}`);
 	}
 	else
-		show_message(`Failed to save component.`);
+		show_message(`保存组件失败.`);
 }
 
 async function import_component(component_name, component, mode) {
@@ -341,30 +341,30 @@ function checkVersion(name, component) {
 	if(rpack_map[name]) {
 		let old_version = rpack_map[name].version;
 		if(!old_version || old_version == '') {
-			msg = `  '${name}' Upgrade (V0.0 -> V${component.version})`;
+			msg = `  '${name}' 更新 (V0.0 -> V${component.version})`;
 		}
 		else {
 			let c = versionCompare(old_version, component.version);
 			if(c < 0) {
-				msg = `  '${name}' Downgrade (V${old_version} -> V${component.version})`;
+				msg = `  '${name}' 降级 (V${old_version} -> V${component.version})`;
 			}
 			else if(c > 0) {
-				msg = `  '${name}' Upgrade (V${old_version} -> V${component.version})`;
+				msg = `  '${name}' 更新 (V${old_version} -> V${component.version})`;
 			}
 			else {
-				msg = `  '${name}' Same version (V${component.version})`;
+				msg = `  '${name}' 版本一致 (V${component.version})`;
 			}
 		}
 	}
 	else {
-		msg = `'${name}' NEW (V${component.version})`;
+		msg = `'${name}' 新版本 (V${component.version})`;
 	}
 
 	return msg;
 }
 
 function handle_import_components(components) {
-	let msg = 'Components:\n';
+	let msg = '组件:\n';
 	let cnt = 0;
 	for(let name in components) {
 		let component = components[name];
@@ -384,7 +384,7 @@ function handle_import_components(components) {
 	}
 
 	let last_name = null;
-	msg += '\nWill you load components?\n';
+	msg += '\n你想要加载组件?\n';
 	if(confirm(msg)) {
 		let mode = confirm('\nWill you save components?\n(cancel=load without save)');
 
