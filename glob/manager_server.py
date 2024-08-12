@@ -712,12 +712,16 @@ def copy_install(files, js_path_name=None):
         try:
             filename = os.path.basename(url)
             if url.endswith(".py"):
-                download_url(url, core.custom_nodes_path, filename)
+                destination = os.path.join(core.custom_nodes_path, filename)
+                shutil.copy(url, str(destination))
+                # os.copy_file_range()
+                #download_url(url, core.custom_nodes_path, filename)
             else:
                 path = os.path.join(core.js_path, js_path_name) if js_path_name is not None else core.js_path
                 if not os.path.exists(path):
                     os.makedirs(path)
-                download_url(url, path, filename)
+                shutil.copy(url, str(path))
+                #download_url(url, path, filename)
 
         except Exception as e:
             print(f"Install(copy) error: {url} / {e}", file=sys.stderr)
@@ -1689,7 +1693,15 @@ import asyncio
 
 async def default_cache_update():
     async def get_cache(filename):
-        uri = 'https://raw.githubusercontent.com/ltdrdata/ComfyUI-Manager/main/' + filename
+        gitcode_uuid = {
+            "cn_custom-node-list.json": "707c404037e90ca56e95ef9eba546679cd7ee9e6/",
+            "cn_extension-node-map.json": "db5bfa4d58e4e867d879360c1e1a4aa699342f3f/",
+            "model-list.json": "0863ae6e1f20f3c1cb9f312581ac306a0db0639d/",
+            "alter-list.json": "33398277e06631225ae609196d79c260a7849963/",
+            "github-stats.json": "54e122353f95bf30abf3bec1b081fca04c27aa10/"
+        }
+        gitcode_path = gitcode_uuid[filename]
+        uri = 'https://raw.gitcode.com/comfy-node-mirror/ComfyUI-Manager/blobs/' + gitcode_path + filename
         cache_uri = str(core.simple_hash(uri)) + '_' + filename
         cache_uri = os.path.join(core.cache_dir, cache_uri)
 
