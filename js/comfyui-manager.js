@@ -811,27 +811,27 @@ class ManagerMenuDialog extends ComfyDialog {
 		let self = this;
 
 		this.update_check_checkbox = $el("input",{type:'checkbox', id:"skip_update_check"},[])
-		const uc_checkbox_text = $el("label",{for:"skip_update_check"},[" Skip update check"])
+		const uc_checkbox_text = $el("label",{for:"skip_update_check"},[" 跳过版本更新"])
 		uc_checkbox_text.style.color = "var(--fg-color)";
 		uc_checkbox_text.style.cursor = "pointer";
 		this.update_check_checkbox.checked = true;
 
 		// db mode
 		this.datasrc_combo = document.createElement("select");
-		this.datasrc_combo.setAttribute("title", "Configure where to retrieve node/model information. If set to 'local,' the channel is ignored, and if set to 'channel (remote),' it fetches the latest information each time the list is opened.");
+		this.datasrc_combo.setAttribute("title", "选择一个获取custom node的源");
 		this.datasrc_combo.className = "cm-menu-combo";
-		this.datasrc_combo.appendChild($el('option', { value: 'cache', text: 'DB: Channel (1day cache)' }, []));
-		this.datasrc_combo.appendChild($el('option', { value: 'local', text: 'DB: Local' }, []));
-		this.datasrc_combo.appendChild($el('option', { value: 'url', text: 'DB: Channel (remote)' }, []));
+		//this.datasrc_combo.appendChild($el('option', { value: 'cache', text: 'DB: Channel (1day cache)' }, []));
+		this.datasrc_combo.appendChild($el('option', { value: 'local', text: 'gitcode加速源' }, []));
+		//this.datasrc_combo.appendChild($el('option', { value: 'url', text: 'DB: Channel (remote)' }, []));
 
 		// preview method
 		let preview_combo = document.createElement("select");
-		preview_combo.setAttribute("title", "Configure how latent variables will be decoded during preview in the sampling process.");
+		preview_combo.setAttribute("title", "采样器的预览模式");
 		preview_combo.className = "cm-menu-combo";
-		preview_combo.appendChild($el('option', { value: 'auto', text: 'Preview method: Auto' }, []));
-		preview_combo.appendChild($el('option', { value: 'taesd', text: 'Preview method: TAESD (slow)' }, []));
-		preview_combo.appendChild($el('option', { value: 'latent2rgb', text: 'Preview method: Latent2RGB (fast)' }, []));
-		preview_combo.appendChild($el('option', { value: 'none', text: 'Preview method: None (very fast)' }, []));
+		preview_combo.appendChild($el('option', { value: 'auto', text: '预览模式: 自动' }, []));
+		preview_combo.appendChild($el('option', { value: 'taesd', text: '预览模式: TAESD (慢)' }, []));
+		preview_combo.appendChild($el('option', { value: 'latent2rgb', text: '预览模式: Latent2RGB (块)' }, []));
+		preview_combo.appendChild($el('option', { value: 'none', text: '预览模式: 无 (非常快)' }, []));
 
 		api.fetchApi('/manager/preview_method')
 			.then(response => response.text())
@@ -843,13 +843,13 @@ class ManagerMenuDialog extends ComfyDialog {
 
 		// nickname
 		let badge_combo = document.createElement("select");
-		badge_combo.setAttribute("title", "Configure the content to be displayed on the badge at the top right corner of the node. The ID is the identifier of the node. If 'hide built-in' is selected, both unknown nodes and built-in nodes will be omitted, making them indistinguishable");
+		badge_combo.setAttribute("title", "配置节点右上角徽章上显示的内容。ID 是节点的标识符。如果选择隐藏内置，未知节点和内置节点都将被省略，使它们无法区分");
 		badge_combo.className = "cm-menu-combo";
-		badge_combo.appendChild($el('option', { value: 'none', text: 'Badge: None' }, []));
-		badge_combo.appendChild($el('option', { value: 'nick', text: 'Badge: Nickname' }, []));
-		badge_combo.appendChild($el('option', { value: 'nick_hide', text: 'Badge: Nickname (hide built-in)' }, []));
-		badge_combo.appendChild($el('option', { value: 'id_nick', text: 'Badge: #ID Nickname' }, []));
-		badge_combo.appendChild($el('option', { value: 'id_nick_hide', text: 'Badge: #ID Nickname (hide built-in)' }, []));
+		badge_combo.appendChild($el('option', { value: 'none', text: '节点标记: None' }, []));
+		badge_combo.appendChild($el('option', { value: 'nick', text: '节点标记: Nickname' }, []));
+		badge_combo.appendChild($el('option', { value: 'nick_hide', text: '节点标记: Nickname (hide built-in)' }, []));
+		badge_combo.appendChild($el('option', { value: 'id_nick', text: '节点标记: #ID Nickname' }, []));
+		badge_combo.appendChild($el('option', { value: 'id_nick_hide', text: '节点标记: #ID Nickname (hide built-in)' }, []));
 
 		api.fetchApi('/manager/badge_mode')
 			.then(response => response.text())
@@ -863,7 +863,7 @@ class ManagerMenuDialog extends ComfyDialog {
 
 		// channel
 		let channel_combo = document.createElement("select");
-		channel_combo.setAttribute("title", "Configure the channel for retrieving data from the Custom Node list (including missing nodes) or the Model list. Note that the badge utilizes local information.");
+		channel_combo.setAttribute("title", "选择一个源获取节点和模型星系.");
 		channel_combo.className = "cm-menu-combo";
 		api.fetchApi('/manager/channel_url_list')
 			.then(response => response.json())
@@ -873,7 +873,7 @@ class ManagerMenuDialog extends ComfyDialog {
 					for (let i in urls) {
 						if (urls[i] != '') {
 							let name_url = urls[i].split('::');
-							channel_combo.appendChild($el('option', { value: name_url[0], text: `Channel: ${name_url[0]}` }, []));
+							channel_combo.appendChild($el('option', { value: name_url[0], text: `源: ${name_url[0]}` }, []));
 						}
 					}
 
@@ -890,11 +890,11 @@ class ManagerMenuDialog extends ComfyDialog {
 
 		// default ui state
 		let default_ui_combo = document.createElement("select");
-		default_ui_combo.setAttribute("title", "Set the default state to be displayed in the main menu when the browser starts.");
+		default_ui_combo.setAttribute("title", "设置UI默认风格.");
 		default_ui_combo.className = "cm-menu-combo";
-		default_ui_combo.appendChild($el('option', { value: 'none', text: 'Default UI: None' }, []));
-		default_ui_combo.appendChild($el('option', { value: 'history', text: 'Default UI: History' }, []));
-		default_ui_combo.appendChild($el('option', { value: 'queue', text: 'Default UI: Queue' }, []));
+		default_ui_combo.appendChild($el('option', { value: 'none', text: '默认UI: None' }, []));
+		default_ui_combo.appendChild($el('option', { value: 'history', text: '默认UI: History' }, []));
+		default_ui_combo.appendChild($el('option', { value: 'queue', text: '默认UI: Queue' }, []));
 		api.fetchApi('/manager/default_ui')
 			.then(response => response.text())
 			.then(data => { default_ui_combo.value = data; });
@@ -923,11 +923,11 @@ class ManagerMenuDialog extends ComfyDialog {
 
 		// default ui state
 		let component_policy_combo = document.createElement("select");
-		component_policy_combo.setAttribute("title", "When loading the workflow, configure which version of the component to use.");
+		component_policy_combo.setAttribute("title", "加载工作流时，组件版本策略");
 		component_policy_combo.className = "cm-menu-combo";
-		component_policy_combo.appendChild($el('option', { value: 'workflow', text: 'Component: Use workflow version' }, []));
-		component_policy_combo.appendChild($el('option', { value: 'higher', text: 'Component: Use higher version' }, []));
-		component_policy_combo.appendChild($el('option', { value: 'mine', text: 'Component: Use my version' }, []));
+		component_policy_combo.appendChild($el('option', { value: 'workflow', text: '组件: 使用工作流版本' }, []));
+		component_policy_combo.appendChild($el('option', { value: 'higher', text: '组件: 使用更新版本' }, []));
+		component_policy_combo.appendChild($el('option', { value: 'mine', text: '组件: 使用本地版本' }, []));
 		api.fetchApi('/manager/component/policy')
 			.then(response => response.text())
 			.then(data => {
@@ -941,13 +941,13 @@ class ManagerMenuDialog extends ComfyDialog {
 		});
 
 		let dbl_click_policy_combo = document.createElement("select");
-		dbl_click_policy_combo.setAttribute("title", "Sets the behavior when you double-click the title area of a node.");
+		dbl_click_policy_combo.setAttribute("title", "双击node标题时的行为.");
 		dbl_click_policy_combo.className = "cm-menu-combo";
-		dbl_click_policy_combo.appendChild($el('option', { value: 'none', text: 'Double-Click: None' }, []));
-		dbl_click_policy_combo.appendChild($el('option', { value: 'copy-all', text: 'Double-Click: Copy All Connections' }, []));
-		dbl_click_policy_combo.appendChild($el('option', { value: 'copy-input', text: 'Double-Click: Copy Input Connections' }, []));
-		dbl_click_policy_combo.appendChild($el('option', { value: 'possible-input', text: 'Double-Click: Possible Input Connections' }, []));
-		dbl_click_policy_combo.appendChild($el('option', { value: 'dual', text: 'Double-Click: Possible(left) + Copy(right)' }, []));
+		dbl_click_policy_combo.appendChild($el('option', { value: 'none', text: '双击: None' }, []));
+		dbl_click_policy_combo.appendChild($el('option', { value: 'copy-all', text: '双击: Copy All Connections' }, []));
+		dbl_click_policy_combo.appendChild($el('option', { value: 'copy-input', text: '双击: Copy Input Connections' }, []));
+		dbl_click_policy_combo.appendChild($el('option', { value: 'possible-input', text: '双击: Possible Input Connections' }, []));
+		dbl_click_policy_combo.appendChild($el('option', { value: 'dual', text: '双击: Possible(left) + Copy(right)' }, []));
 
 		api.fetchApi('/manager/dbl_click/policy')
 			.then(response => response.text())
@@ -988,14 +988,14 @@ class ManagerMenuDialog extends ComfyDialog {
 			preview_combo,
 			badge_combo,
 			default_ui_combo,
-			share_combo,
+			//share_combo,
 			component_policy_combo,
 			dbl_click_policy_combo,
 			$el("br", {}, []),
 
 			$el("br", {}, []),
 			$el("filedset.cm-experimental", {}, [
-					$el("legend.cm-experimental-legend", {}, ["EXPERIMENTAL"]),
+					$el("legend.cm-experimental-legend", {}, ["实验性功能"]),
 					$el("button.cm-experimental-button", {
 						type: "button",
 						textContent: "快照管理器",
@@ -1146,7 +1146,7 @@ class ManagerMenuDialog extends ComfyDialog {
 				$el("div.comfy-modal-content",
 					[
 						$el("tr.cm-title", {}, [
-								$el("font", {size:6, color:"white"}, [`ComfyUI Manager Menu`])]
+								$el("font", {size:6, color:"white"}, [`ComfyUI管理器菜单`])]
 							),
 						$el("br", {}, []),
 						$el("div.cm-menu-container",
